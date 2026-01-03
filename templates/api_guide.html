@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Docs — WebExtract.ai</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    pre {
+      background: var(--panel) !important;
+      padding: 24px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      line-height: 1.6;
+      margin: 24px 0;
+    }
+
+    code {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .method-badge {
+      background: var(--text);
+      color: var(--bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      margin-right: 12px;
+    }
+
+    .doc-section {
+      margin-bottom: 60px;
+    }
+
+    .param-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .param-table td,
+    .param-table th {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .param-table th {
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <a href="/" class="logo-container"
+        style="margin-bottom: 32px; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+        <div class="logo-icon"><i class="fas fa-bolt bolt"></i></div>
+        <span style="font-weight: 700; font-size: 1.1rem; color: var(--text);">WebExtract</span>
+      </a>
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-item">
+          <i class="fas fa-terminal"></i> Console
+        </a>
+        <a href="/api-guide" class="nav-item active">
+          <i class="fas fa-book"></i> API Docs
+        </a>
+        <a href="/analytics" class="nav-item">
+          <i class="fas fa-chart-line"></i> Analytics
+        </a>
+        <a href="/settings" class="nav-item">
+          <i class="fas fa-cog"></i> Settings
+        </a>
+      </nav>
+    </aside>
+
+    <main style="flex: 1; padding: 60px; max-width: 1000px; margin: 0 auto; width: 100%;">
+      <header style="margin-bottom: 60px;" class="animate-in">
+        <h1 style="font-size: 2rem; font-weight: 700; color: var(--text);">Developer Interface</h1>
+        <p style="color: var(--text-dim); margin-top: 8px; font-size: 0.95rem;">Integrate structured web intelligence
+          into your pipeline.</p>
+      </header>
+
+      <div class="doc-section animate-in delay-1">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px;">Authentication</h2>
+        <p style="color: var(--text-dim); line-height: 1.6;">All requests must include the <code>X-API-Key</code> header
+          for authorization.</p>
+        <div class="card" style="margin-top: 24px; background: var(--panel); border-style: solid;">
+          <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 8px; font-weight: 600;">YOUR PIPELINE KEY</p>
+          <code style="font-size: 1.1rem; font-family: 'JetBrains Mono';">wx_live_free_key_12345</code>
+        </div>
+      </div>
+
+      <div class="doc-section animate-in delay-2">
+        <div style="display: flex; align-items: center; margin-bottom: 16px;">
+          <span class="method-badge">POST</span>
+          <h2 style="margin: 0; font-size: 1.25rem; font-weight: 700; font-family: 'JetBrains Mono';">/api/scrape</h2>
+        </div>
+        <p style="color: var(--text-dim); line-height: 1.6;">Initialize a core extraction job. The engine intelligently
+          determines if high-fidelity rendering is required.</p>
+
+        <pre>{
+  "url": "https://example.com/source",
+  "mode": "auto",
+  "max_pages": 1
+}</pre>
+
+        <table class="param-table">
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-family: 'JetBrains Mono'; color: var(--text);">url</td>
+              <td style="color: var(--text-dim);">Required string. Destination destination URL.</td>
+            </tr>
+            <tr>
+              <td style="font-family: 'JetBrains Mono'; color: var(--text);">mode</td>
+              <td style="color: var(--text-dim);">Optional. <code>auto</code>, <code>product</code>,
+                <code>article</code>, or <code>tables</code>.
+              </td>
+            </tr>
+            <tr>
+              <td style="font-family: 'JetBrains Mono'; color: var(--text);">depth</td>
+              <td style="color: var(--text-dim);">Optional number. Recursive depth for crawls.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-section animate-in delay-3">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 16px;">Python Implementation</h2>
+        <pre>import requests
+
+headers = {
+    "X-API-Key": "wx_live_free_key_12345",
+    "Content-Type": "application/json"
+}
+
+r = requests.post(
+    "http://api.webextract.ai/scrape",
+    headers=headers,
+    json={"url": "https://source.com"}
+)
+
+print(r.json()['stats'])</pre>
+      </div>
+
+    </main>
+  </div>
+
+</body>
+
+</html>

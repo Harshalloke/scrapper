@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings — WebExtract.ai</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <a href="/" class="logo-container"
+                style="margin-bottom: 32px; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+                <div class="logo-icon"><i class="fas fa-bolt bolt"></i></div>
+                <span style="font-weight: 700; font-size: 1.1rem; color: var(--text);">WebExtract</span>
+            </a>
+
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">
+                    <i class="fas fa-terminal"></i> Console
+                </a>
+                <a href="/api-guide" class="nav-item">
+                    <i class="fas fa-book"></i> API Docs
+                </a>
+                <a href="/analytics" class="nav-item">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="/settings" class="nav-item active">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </aside>
+
+        <main style="flex: 1; padding: 60px; max-width: 800px; margin: 0 auto; width: 100%;">
+            <header style="margin-bottom: 60px;" class="animate-in">
+                <h1 style="font-size: 2rem; font-weight: 700; color: var(--text);">Configuration</h1>
+                <p style="color: var(--text-dim); margin-top: 8px; font-size: 0.95rem;">Global extraction parameters and
+                    security settings.</p>
+            </header>
+
+            {% if success %}
+            <div class="card animate-in"
+                style="border-color: var(--success); background: rgba(16,185,129,0.05); margin-bottom: 32px; padding: 16px;">
+                <p style="color: var(--success); font-weight: 600; font-size: 0.9rem;"><i
+                        class="fas fa-check-circle"></i> Configuration updated successfully.</p>
+            </div>
+            {% endif %}
+
+            <div class="glass-panel animate-in delay-1" style="padding: 32px;">
+                <form method="POST">
+                    <section style="margin-bottom: 48px;">
+                        <h3 style="margin-bottom: 24px; font-size: 1.1rem; font-weight: 700;">Crawler Core</h3>
+                        <div style="margin-bottom: 24px;">
+                            <label
+                                style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">User-Agent
+                                Blueprint</label>
+                            <input type="text" name="user_agent" value="{{ config.user_agent }}">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                            <div>
+                                <label
+                                    style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Default
+                                    Engine</label>
+                                <select name="default_mode">
+                                    <option value="auto" {% if config.default_mode=='auto' %}selected{% endif %}>Neural
+                                        Auto-Detect</option>
+                                    <option value="product" {% if config.default_mode=='product' %}selected{% endif %}>
+                                        Retail Crawler</option>
+                                    <option value="article" {% if config.default_mode=='article' %}selected{% endif %}>
+                                        Semantic Reader</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label
+                                    style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Timeout
+                                    (s)</label>
+                                <input type="number" name="timeout" value="{{ config.timeout }}">
+                            </div>
+                        </div>
+                        <div style="margin-top: 24px;">
+                            <label
+                                style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Crawl
+                                Limit (Pages)</label>
+                            <input type="number" name="max_pages_limit" value="{{ config.max_pages_limit }}">
+                        </div>
+                    </section>
+
+                    <section style="margin-bottom: 48px; border-top: 1px solid var(--border); padding-top: 32px;">
+                        <h3 style="margin-bottom: 24px; font-size: 1.1rem; font-weight: 700;">Security</h3>
+                        <div style="margin-bottom: 24px;">
+                            <label
+                                style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Pipeline
+                                Key</label>
+                            <div style="display: flex; gap: 12px;">
+                                <input type="text" name="api_key" value="{{ config.api_key }}"
+                                    style="flex: 1; font-family: 'JetBrains Mono';">
+                            </div>
+                        </div>
+                    </section>
+
+                    <section style="margin-bottom: 48px; border-top: 1px solid var(--border); padding-top: 32px;">
+                        <div
+                            style="display: flex; align-items: center; justify-content: space-between; padding: 20px; background: var(--panel); border-radius: 8px; border: 1px solid var(--border);">
+                            <div>
+                                <h4 style="font-size: 1rem; margin-bottom: 4px;">Residential IP Rotation</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-dim);">Bypass IP rate-limits via
+                                    institutional proxies.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" name="proxy_enabled" {% if config.proxy_enabled %}checked{% endif
+                                    %}>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <div style="display: flex; justify-content: flex-end;">
+                        <button type="submit" class="btn-primary" style="padding: 12px 40px;">Commit Changes</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+</body>
+
+</html>

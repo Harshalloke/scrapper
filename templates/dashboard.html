@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Console — WebExtract.ai</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <a href="/" class="logo-container"
+        style="margin-bottom: 32px; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+        <div class="logo-icon">
+          <i class="fas fa-bolt bolt"></i>
+        </div>
+        <span style="font-weight: 700; font-size: 1.1rem; color: var(--text);">
+          WebExtract
+        </span>
+      </a>
+
+
+      <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-item active">
+          <i class="fas fa-terminal"></i> Console
+        </a>
+        <a href="/api-guide" class="nav-item">
+          <i class="fas fa-book"></i> API Docs
+        </a>
+        <a href="/analytics" class="nav-item">
+          <i class="fas fa-chart-line"></i> Analytics
+        </a>
+        <a href="/settings" class="nav-item">
+          <i class="fas fa-cog"></i> Settings
+        </a>
+      </nav>
+
+      <div style="margin-top: auto;">
+        <div class="card" style="padding: 16px; background: transparent; border: 1px solid var(--border);">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 0.75rem; font-weight: 600; color: var(--text-dim);">QUOTA</span>
+            <span style="font-size: 0.75rem; font-weight: 700;">45%</span>
+          </div>
+          <div style="height: 4px; background: var(--border); border-radius: 4px; overflow: hidden;">
+            <div style="width: 45%; height: 100%; background: var(--text);"></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main style="flex: 1; padding: 40px; max-width: 1200px; margin: 0 auto; width: 100%;">
+      <header style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px;"
+        class="animate-in">
+        <div>
+          <h1 style="font-size: 2rem; font-weight: 700; color: var(--text);">Extraction Console</h1>
+          <p style="color: var(--text-dim); margin-top: 8px; font-size: 0.95rem;">Convert any website into clean,
+            structured data in
+            seconds.</p>
+        </div>
+        <div class="badge" style="margin: 0;">
+          <i class="fas fa-circle" style="font-size: 0.5rem; margin-right: 8px; color: var(--success);"></i>
+          K3S CLUSTER ONLINE
+        </div>
+      </header>
+
+      {% if error %}
+      <div class="card animate-in"
+        style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05); margin-bottom: 30px;">
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <i class="fas fa-exclamation-triangle" style="color: var(--danger); font-size: 1.5rem;"></i>
+          <div>
+            <h4 style="color: #ef4444;">Extraction Failed</h4>
+            <p style="color: #fca5a5; font-size: 0.9rem;">{{ error }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <section class="glass-panel animate-in delay-1" style="padding: 32px; margin-bottom: 40px;">
+        <form method="POST">
+          <div style="margin-bottom: 24px;">
+            <label
+              style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Target
+              Destination</label>
+            <input type="url" name="url" placeholder="https://example.com/data" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px;">
+            <div>
+              <label
+                style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Depth</label>
+              <input type="number" name="pages" value="1" min="1" max="10">
+            </div>
+            <div>
+              <label
+                style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block;">Intelligence</label>
+              <select name="mode">
+                <option value="auto">Neural Auto-Detect</option>
+                <option value="product">Retail Crawler</option>
+                <option value="article">Semantic Reader</option>
+                <option value="tables">Table Structuralizer</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; height: 50px;">
+            Initialize Extraction Job
+          </button>
+        </form>
+      </section>
+
+      {% if data %}
+      <div class="stats-grid animate-in delay-2">
+        <div class="stat-card">
+          <div class="stat-label">Pages Crawled</div>
+          <div class="stat-value">{{ data.stats.pages }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Text Blocks</div>
+          <div class="stat-value">{{ data.stats.articles }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Data Objects</div>
+          <div class="stat-value">{{ data.stats.products }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Table Structures</div>
+          <div class="stat-value">{{ data.stats.tables }}</div>
+        </div>
+      </div>
+
+      <!-- Results Section -->
+      <div class="animate-in delay-3">
+
+        {% if data.content %}
+        <section class="card" style="margin-bottom: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3><i class="fas fa-file-lines" style="color: var(--accent); margin-right: 12px;"></i> Extracted Content
+            </h3>
+            <a href="/download/txt" class="btn-secondary"><i class="fas fa-download"></i> Save as .txt</a>
+          </div>
+          <div style="max-height: 400px; overflow-y: auto;">
+            {% for article in data.content %}
+            <div class="article-block" style="margin-bottom: 20px;">{{ article[:1000] }}...</div>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
+
+        {% if data.products %}
+        <section class="card" style="margin-bottom: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3><i class="fas fa-box-archive" style="color: var(--success); margin-right: 12px;"></i> Structured Data
+            </h3>
+            <a href="/download/json" class="btn-secondary"><i class="fas fa-file-code"></i> Save as .json</a>
+          </div>
+          <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead style="text-align: left; color: var(--muted); border-bottom: 1px solid var(--border);">
+                <tr>
+                  <th style="padding: 16px;">Product / Title</th>
+                  <th>Value</th>
+                  <th style="padding-right: 16px;">Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in data.products %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                  <td style="padding: 16px; font-weight: 600;">
+                    <a href="{{ p.url }}" target="_blank"
+                      style="color: inherit; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s;"
+                      onmouseover="this.style.borderColor='var(--accent)';"
+                      onmouseout="this.style.borderColor='transparent';">
+                      {{ p.title }}
+                    </a>
+                  </td>
+                  <td style="color: var(--success); font-family: 'JetBrains Mono';">{{ p.price }}</td>
+                  <td><span
+                      style="background: rgba(255,193,7,0.1); color: #ffc107; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem;">★
+                      {{ p.rating }}</span></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </section>
+        {% endif %}
+
+        {% if data.images %}
+        <section class="card" style="margin-bottom: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h3><i class="fas fa-images" style="color: #ec4899; margin-right: 12px;"></i> Media Assets</h3>
+            <a href="/download/images" class="btn-primary"
+              style="background: #ec4899; box-shadow: 0 4px 15px rgba(236,72,153,0.3);">
+              <i class="fas fa-file-zipper"></i> Download All (ZIP)
+            </a>
+          </div>
+          <div class="image-grid">
+            {% for img in data.images[:24] %}
+            <div class="image-card">
+              <img src="{{ img.src }}" alt="{{ img.alt }}" onerror="this.src='https://placehold.co/300x200?text=Asset'">
+              <div class="image-overlay">
+                <div class="image-meta">{{ img.alt or 'Resource asset' }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% if data.images|length > 24 %}
+          <p style="text-align: center; margin-top: 20px; color: var(--muted); font-size: 0.9rem;">+ {{
+            data.images|length - 24 }} more images in ZIP archive</p>
+          {% endif %}
+        </section>
+        {% endif %}
+
+        {% if data.links %}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <section class="card">
+            <h4 style="margin-bottom: 20px;"><i class="fas fa-link" style="color: var(--accent);"></i> Internal Map</h4>
+            <div style="max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 0.75rem;">
+              {% for link in data.links.internal[:50] %}
+              <div
+                style="margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <a href="{{ link }}" target="_blank"
+                  style="color: var(--text-dim); text-decoration: none; transition: color 0.2s;">{{ link }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+          <section class="card">
+            <h4 style="margin-bottom: 20px;"><i class="fas fa-external-link-alt" style="color: var(--success);"></i>
+              External Links</h4>
+            <div style="max-height: 200px; overflow-y: auto; font-family: 'JetBrains Mono'; font-size: 0.75rem;">
+              {% for link in data.links.external[:50] %}
+              <div
+                style="margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                <a href="{{ link }}" target="_blank"
+                  style="color: var(--text-dim); text-decoration: none; transition: color 0.2s;">{{ link }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </section>
+        </div>
+        {% endif %}
+
+      </div>
+      {% endif %}
+    </main>
+  </div>
+
+  <script>
+    // Subtle hover effect logic could go here
+  </script>
+
+</body>
+
+</html>
