@@ -2,6 +2,8 @@
 
 Institutional-grade web data extraction infrastructure for the AI era. Turn any website into structured datasets with high-fidelity rendering, anti-block stealth, and automated schema detection.
 
+🔗 **Live Demo:** [WebExtraxt.ai](https://scrapper-wb5m.onrender.com/)
+
 ## 🚀 Features
 
 - **Neural Extraction**: AI-powered selectors that adapt to DOM changes.
