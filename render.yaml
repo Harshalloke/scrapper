@@ -3,6 +3,7 @@ services:
     name: webextract-ai
     env: python
     buildCommand: |
+      python -m pip install --upgrade pip
       pip install -r requirements.txt
       playwright install --with-deps chromium
     startCommand: gunicorn app:app
