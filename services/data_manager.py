@@ -3,8 +3,10 @@ import os
 import time
 from datetime import datetime
 
-STATS_FILE = "stats.json"
-CONFIG_FILE = "config.json"
+# Check for persistent storage path (Render disk)
+DATA_DIR = "/data" if os.path.exists("/data") else "."
+STATS_FILE = os.path.join(DATA_DIR, "stats.json")
+CONFIG_FILE = os.path.join(DATA_DIR, "config.json")
 
 DEFAULT_CONFIG = {
     "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
